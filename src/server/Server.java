@@ -34,7 +34,7 @@ public class Server extends Thread {
             log.info("Удачно перемножили две матрицы");
             Matrix.writeMatrixToStream(c, out);
             out.flush();
-            log.info("Удачно записали результат в поток\n-------------------------");
+            log.info("Удачно записали результат в поток\n------------------------------------------------");
         } catch (IOException e) {
             log.warning(e.getMessage() + "\nНе удалось произвести вычисления на сервере");
             System.err.println("Не удалось произвести вычисления на сервере");
