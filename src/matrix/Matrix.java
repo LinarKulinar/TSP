@@ -187,8 +187,8 @@ public class Matrix {
             Matrix a = new Matrix(n, m);
             for (int i = 0; i < n; i++) {
                 for (int j = 0; j < m; j++) {
-                    int value = Integer.parseInt(in.readUTF()); //Считываем строку
-                    a.setElement(i, j, value);//кладем значение в массив
+                    double value = Double.parseDouble(in.readUTF()); //Считываем строку
+                    a.setElement(value, i, j);//кладем значение в массив
                 }
             }
             return a;
