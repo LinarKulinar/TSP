@@ -1,39 +1,47 @@
 import matrix.Matrix;
 
+import java.util.logging.Logger;
+
 public class TestSpace {
-    static String fileName = "B.txt"; //два слеша - магия после копирования
+
+    private static final Logger log = Logger.getLogger(TestSpace.class.getName());
 
     /**
      * Тестим вывод матрицы в файл fileName
+     *
+     * @param fileName - файл, куда будем выводить матрицы
      */
-    public static void testOutputMatrix() {
+    public static void testOutputMatrix(String fileName) {
 
         double arr[][] = {{0, 1, 2, 10.0}, {1, 2, 3, 4}, {0, 10, 2, 3}}; // Инициализировал массив двумерный
         Matrix m = new Matrix(arr); //создал матрицу, заполненную как и массив arr
-        try {
-            Matrix.writeMatrixToFile(m, fileName);
-            System.out.println("Successful write matrix in file!");//напишет это, если запись пройдет корректно
-        } catch (Exception e) {
-            System.err.println("Fail write matrix in file!");//напишет это, если запись пройдет некорректно, причем в stderr консоли
-        }
+        Matrix.writeMatrixToFile(m, fileName);
+        log.info("Successful write matrix in file!");//напишет это, если запись пройдет корректно
+
     }
 
     /**
      * Тестим работоспособность сложения матриц
+     *
+     * @param fileName - файл, куда произведем запись по окончании умножения
      */
-    public static void testAdditionMatrix(Matrix m1, Matrix m2) {
+    public static void testMultMatrix(Matrix m1, Matrix m2, String fileName) {
         try {
-            Matrix mSum = Matrix.multTwoMatrix(m1, m2);
-            Matrix.writeMatrixToFile(mSum, fileName);//обернул в try, тк может кинуть ошибку
-            System.out.println("Successful addition and write matrix!");//напишет это, если сложение и запись пройдет корректно
+            Matrix.writeMatrixToFile(m1,"A.txt");
+            Matrix.writeMatrixToFile(m2,"B.txt");
+
+            Matrix mMult = Matrix.multTwoMatrix(m1, m2);
+            Matrix.writeMatrixToFile(mMult, fileName);//обернул в try, тк может кинуть ошибку
+            log.info("Successful multiplication and write matrix!");//напишет это, если умножение и запись пройдет корректно
         } catch (Exception e) {
-            System.err.println("Fail!");//напишет это, если пройдет некорректно, причем в stderr консоли
+            log.warning(e.getMessage() + "\nFail in multipicatio matrix");
+            System.err.println("Fail in multipicatio matrix!");//напишет это, если пройдет некорректно, причем в stderr консоли
         }
 
     }
 
-    private static void testReadFromFile() {
-        Matrix m = Matrix.readFromFile("A.txt");
+    private static void testReadFromFile(String filename) {
+        Matrix m = Matrix.readFromFile(filename);
         System.out.print(m.getSizeRow() + " ");//число строк записываемой матрицы
         System.out.print(m.getSizeColumn() + "\n");//число столбцов
         for (int i = 0; i < m.getSizeRow(); i++) {
@@ -43,39 +51,37 @@ public class TestSpace {
             System.out.print("\n");//Перенесем на следующую строку когда все элементы в строке уже записаны
         }
         System.out.flush();
+        log.info("Чтение из файла произошла успешно");
     }
 
-    public static void testfillRandMatrix(){
-        Matrix m = new Matrix(2,3);
+    /**
+     * функция для тестирования заполнения матриц рандомом
+     *
+     * @param fileName - файл, куда будем выводить результат
+     */
+    public static void testfillRandMatrix(String fileName) {
+        Matrix m = new Matrix(2, 3);
         m.fillRandMatrix();
-        Matrix.writeMatrixToFile(m,fileName);
+        Matrix.writeMatrixToFile(m, fileName);
     }
 
-    //создадим матрицы m1,m2,m3 для проверки
-    static double arr1[][] = {{0, 1, 2, 10.0}, {1, 2, 3, 4}, {0, 10, 2, 3}}; // Инициализировал массив двумерный (3x4)
-    static Matrix m1 = new Matrix(arr1); //создал матрицу, заполненную как и массив arr
-    static double arr2[][] = {{3, 1, 2, 10.0}, {1, 2, 3, 4}, {0, 10, 2, 3}}; // Инициализировал массив двумерный (3x4)
-    static Matrix m2 = new Matrix(arr2); //создал матрицу, заполненную как и массив arr
-    static double arr3[][] = {{3, 1, 2}, {1, 2, 3}, {0, 10, 2}}; // Размерность (3x3) не совпадает размерностью с m1 и m2
-    static Matrix m3 = new Matrix(arr3); //создал матрицу, заполненную как и массив arr
-
-
+    /**
+     * точка входа
+     */
     public static void main(String[] args) {//точка входа в программу
-        testOutputMatrix();
-        //testReadFromFile();
-        //testAdditionMatrix(m1,m2); // должен корректно работать
-        //testAdditionMatrix(m2,m3); // должен завалиться из-за несовпадения размерности
-        testfillRandMatrix();
+        Matrix m1 = new Matrix(3, 4);
+        m1.fillRandMatrix();
+        Matrix m2 = new Matrix(4, 5);
+        m2.fillRandMatrix();
+        Matrix m3 = new Matrix(5, 1);
 
+        //testOutputMatrix("B.txt");
+        //testReadFromFile("A.txt");
+        testMultMatrix(m1, m2, "C.txt"); // должен корректно работать
+        //testMultMatrix(m2, m3, "C.txt"); // должен завалиться из-за несовпадения размерности
+        //testfillRandMatrix("C.txt");
 
 
     }
-
-
-
-    //Matrix o = new Matrix();
-    //Matrix sum = Matrix.multTwoMatrix(a, o);
-
-
 }
 

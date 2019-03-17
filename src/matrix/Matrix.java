@@ -92,10 +92,10 @@ public class Matrix {
      * @return матрица a*b, определяемая по правилам матричного умножения
      */
     public static Matrix multTwoMatrix(Matrix a, Matrix b) {
-        if (a.getSizeRow() != b.getSizeRow() || a.getSizeColumn() != b.getSizeColumn()) {
-            throw new IllegalArgumentException("Складывать матрицы надо совпадающих размерностей"); //Проверить правильность выбора ошибки
+        if (a.getSizeColumn() != b.getSizeRow()) {
+            throw new IllegalArgumentException("Умножать матрицы надо подходящих размерностей"); //Проверить правильность выбора ошибки
         }
-        Matrix c = new Matrix(a.getSizeRow(), a.getSizeColumn());
+        Matrix c = new Matrix(a.getSizeRow(), b.getSizeColumn());
         for (int i = 0; i < a.getSizeRow(); i++) {
             for (int j = 0; j < b.getSizeColumn(); j++) {
                 for (int k = 0; k < a.getSizeColumn(); k++) {
