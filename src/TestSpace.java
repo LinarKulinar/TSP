@@ -23,7 +23,7 @@ public class TestSpace {
      */
     public static void testAdditionMatrix(Matrix m1, Matrix m2) {
         try {
-            Matrix mSum = Matrix.addTwoMatrix(m1, m2);
+            Matrix mSum = Matrix.multTwoMatrix(m1, m2);
             Matrix.writeMatrixToFile(mSum, fileName);//обернул в try, тк может кинуть ошибку
             System.out.println("Successful addition and write matrix!");//напишет это, если сложение и запись пройдет корректно
         } catch (Exception e) {
@@ -74,7 +74,7 @@ public class TestSpace {
 
 
     //Matrix o = new Matrix();
-    //Matrix sum = Matrix.addTwoMatrix(a, o);
+    //Matrix sum = Matrix.multTwoMatrix(a, o);
 
 
 }

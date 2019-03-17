@@ -2,8 +2,11 @@ package matrix;
 
 import java.io.*;
 import java.util.Random;
+import java.util.logging.Logger;
 
 public class Matrix {
+
+    private static final Logger log = Logger.getLogger(Matrix.class.getName());
     private double[][] matrix; //private - чтобы никто не видел
 
     /**
@@ -82,20 +85,22 @@ public class Matrix {
     }
 
     /**
-     * Метод складывает значения две матрицы и вызвращает результат
+     * Метод умножает две матрицы и вызвращает результат
      *
      * @param a матрица a
      * @param b матрица b
-     * @return матрица a+b, определяемая по правилам матричного сложения
+     * @return матрица a*b, определяемая по правилам матричного умножения
      */
-    public static Matrix addTwoMatrix(Matrix a, Matrix b) {
+    public static Matrix multTwoMatrix(Matrix a, Matrix b) {
         if (a.getSizeRow() != b.getSizeRow() || a.getSizeColumn() != b.getSizeColumn()) {
-            throw new IllegalArgumentException("Складывать матрицы надо совпадающих рахмерностей"); //Проверить правильность выбора ошибки
+            throw new IllegalArgumentException("Складывать матрицы надо совпадающих размерностей"); //Проверить правильность выбора ошибки
         }
         Matrix c = new Matrix(a.getSizeRow(), a.getSizeColumn());
         for (int i = 0; i < a.getSizeRow(); i++) {
-            for (int j = 0; j < a.getSizeColumn(); j++) {
-                c.setElement(a.matrix[i][j] + b.matrix[i][j], i, j);
+            for (int j = 0; j < b.getSizeColumn(); j++) {
+                for (int k = 0; k < a.getSizeColumn(); k++) {
+                    c.setElement(a.matrix[i][k] + b.matrix[k][j], i, j);
+                }
             }
         }
         return c;
@@ -123,7 +128,8 @@ public class Matrix {
             outFile.flush();
             outFile.close();//закрываем поток!
         } catch (IOException e) {
-            System.err.println(e.getMessage());
+            log.warning(e.getMessage() + "\nНе удалось записать матрицу в файл");
+            System.err.println("Не удалось записать матрицу в файл");
         }
     }
 
@@ -147,22 +153,29 @@ public class Matrix {
             for (int i = 0; i < n; i++) {
                 String[] str = br.readLine().split(" "); //Считывае строку и пихаем массив с разделителем - пробелом
                 if (str.length != m) {
-                    throw new IOException("Некорректный формат входных данных. (type2)");
+                    throw new IOException("Неверное число чисел в i = " + i + "строке");
                 }
                 for (int j = 0; j < m; j++) {
                     a.setElement(Double.parseDouble(str[j]), i, j);//кладем значение в массив
                 }
             }
             if (br.ready()) {
-                throw new IOException("Некорректный формат входных данных. (type3)");
+                throw new IOException("Записано слишком много данных");
             }
             return a;
         } catch (IOException e) {
-            System.err.println(e.getMessage());
+            log.warning(e.getMessage() + "\nНе удалось промзвести чтение из файла");
+            System.err.println("Не удалось промзвести чтение из файла");
             return null;
         }
     }
 
+    /**
+     * Функция, записывающая матрицу в поток типа @DataOutputStream
+     *
+     * @param m   - исходная матрица
+     * @param out - поток, в который будет производиться запись
+     */
     public static void writeMatrixToStream(Matrix m, DataOutputStream out) {
         //Оказывается, не надо в поток писать пробелы, чтобы потом парсить. Потоки умнее
         try {
@@ -172,13 +185,20 @@ public class Matrix {
                 for (int j = 0; j < m.getSizeColumn(); j++) {
                     out.writeUTF(m.getElement(i, j) + ""); // записывем m[i][j] элемент матрицы, приведенной к стрингу
                 }
-                //out.writeUTF("");//Перенесем на следующую строку когда все элементы в строке уже записаны
             }
-            //out.flush();
+            out.flush();
         } catch (IOException e) {
-            System.err.println(e.getMessage());
+            log.warning(e.getMessage() + "\nНе удалось записать матрицу в поток");
+            System.err.println("Не удалось записать матрицу в поток");
         }
     }
+
+    /**
+     * Функция, читающая из потока матрицу.
+     *
+     * @param in - исходный поток, из которого будет производиться чтение.
+     * @return - прочтенная матрица. В случае некорректного ввода возвращает null.
+     */
 
     public static Matrix readFromStream(DataInputStream in) {
         try {
@@ -192,10 +212,11 @@ public class Matrix {
                 }
             }
             return a;
-        } catch (IOException e) {
-            System.err.println(e.getMessage());
+        } catch (IOException | NumberFormatException e) {
+            log.warning(e.getMessage() + "\nБыли считаны некорректные данные. Произошла ошибка");
+            System.err.println("Были считаны некорректные данные. Произошла ошибка");
             return null;
         }
-    }
 
+    }
 }
