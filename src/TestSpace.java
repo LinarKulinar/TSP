@@ -30,7 +30,7 @@ public class TestSpace {
             Matrix.writeMatrixToFile(m1,"A.txt");
             Matrix.writeMatrixToFile(m2,"B.txt");
 
-            Matrix mMult = Matrix.multTwoMatrix(m1, m2);
+            Matrix mMult = Matrix.addTwoMatrix(m1, m2);
             Matrix.writeMatrixToFile(mMult, fileName);//обернул в try, тк может кинуть ошибку
             log.info("Successful multiplication and write matrix!");//напишет это, если умножение и запись пройдет корректно
         } catch (Exception e) {

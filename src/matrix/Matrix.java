@@ -107,6 +107,27 @@ public class Matrix {
     }
 
     /**
+     * Метод умножает две матрицы и вызвращает результат
+     *
+     * @param a матрица a
+     * @param b матрица b
+     * @return матрица a+b, определяемая по правилам матричного сложения
+     */
+    public static Matrix addTwoMatrix(Matrix a, Matrix b) {
+        if (a.getSizeRow() != b.getSizeRow() || a.getSizeColumn() != b.getSizeColumn()) {
+            throw new IllegalArgumentException("Складывать матрицы надо совпадающих рахмерностей"); //Проверить правильность выбора ошибки
+        }
+        Matrix c = new Matrix(a.getSizeRow(), a.getSizeColumn());
+        for (int i = 0; i < a.getSizeRow(); i++) {
+            for (int j = 0; j < a.getSizeColumn(); j++) {
+                c.setElement(a.matrix[i][j] + b.matrix[i][j], i, j);
+            }
+        }
+        return c;
+    }
+
+
+    /**
      * Функция, записывающая матрицу в файл
      *
      * @param m        исходная матрица

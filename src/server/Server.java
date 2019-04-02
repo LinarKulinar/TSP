@@ -30,7 +30,7 @@ public class Server extends Thread {
             log.info("Удачно считана матрица A");
             Matrix b = Matrix.readFromStream(in);
             log.info("Удачно считана матрица B");
-            Matrix c = Matrix.multTwoMatrix(a, b);
+            Matrix c = Matrix.addTwoMatrix(a, b);
             log.info("Удачно перемножили две матрицы");
             Matrix.writeMatrixToStream(c, out);
             out.flush();
