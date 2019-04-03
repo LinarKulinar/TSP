@@ -115,7 +115,7 @@ public class Matrix {
      */
     public static Matrix addTwoMatrix(Matrix a, Matrix b) {
         if (a.getSizeRow() != b.getSizeRow() || a.getSizeColumn() != b.getSizeColumn()) {
-            throw new IllegalArgumentException("Складывать матрицы надо совпадающих рахмерностей"); //Проверить правильность выбора ошибки
+            throw new IllegalArgumentException("Складывать матрицы надо совпадающих размерностей"); //Проверить правильность выбора ошибки
         }
         Matrix c = new Matrix(a.getSizeRow(), a.getSizeColumn());
         for (int i = 0; i < a.getSizeRow(); i++) {
@@ -134,9 +134,9 @@ public class Matrix {
      * @param fileName путь к файлу, в который будем записывать
      */
     public static void writeMatrixToFile(Matrix m, String fileName) {
-        File file = new File(fileName);//создали объект типа "Файл" в окружении
-        FileWriter outFile = null;//создали поток
         try {
+            File file = new File(fileName);//создали объект типа "Файл" в окружении
+            FileWriter outFile = null;//создали поток
             outFile = new FileWriter(file);
             outFile.write(m.getSizeRow() + " ");//число строк записываемой матрицы
             outFile.write(m.getSizeColumn() + "\n");//число столбцов
@@ -238,6 +238,5 @@ public class Matrix {
             System.err.println("Были считаны некорректные данные. Произошла ошибка");
             return null;
         }
-
     }
 }
